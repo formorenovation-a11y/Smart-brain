@@ -198,10 +198,79 @@
   .kv{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
   .kv:last-child{border-bottom:none}
   .kv .k{color:var(--muted)}
+
+  /* ===== Sidebar (iPad / desktop) ===== */
+  .sidebar{display:none;position:fixed;left:0;top:0;bottom:0;width:248px;z-index:60;
+    flex-direction:column;gap:3px;padding:22px 16px calc(20px + var(--safe-b));
+    background:var(--surface);border-right:1px solid var(--line)}
+  .s-brand{display:flex;align-items:center;gap:11px;padding:6px 8px 22px}
+  .s-brand .mark{width:34px;height:34px;border-radius:10px}
+  .s-brand h1{font-size:16px;font-weight:650;letter-spacing:-.02em;margin:0}
+  .s-brand .sub{font-size:10px;color:var(--faint);letter-spacing:.14em;text-transform:uppercase;margin-top:2px}
+  .s-capture{display:flex;align-items:center;gap:10px;padding:13px 15px;border-radius:14px;background:var(--grad);
+    color:#fff;font-weight:600;font-size:14.5px;margin-bottom:16px;box-shadow:0 8px 22px -8px rgba(122,90,248,.7);transition:.15s}
+  .s-capture:active{transform:scale(.98)}
+  .snav-item{display:flex;align-items:center;gap:13px;padding:11px 15px;border-radius:12px;color:var(--muted);
+    font-size:14.5px;font-weight:520;transition:.15s;text-align:left}
+  .snav-item svg{flex:0 0 auto;color:var(--faint)}
+  .snav-item:hover{background:var(--raised);color:var(--text)}
+  .snav-item.on{background:var(--raised-2);color:var(--text)}
+  .snav-item.on svg{color:var(--v1)}
+  .s-spacer{flex:1}
+  .s-foot{font-size:10.5px;color:var(--faint);padding:12px 15px 2px;letter-spacing:.02em}
+
+  /* ===== iPad portrait & up: usa el ancho ===== */
+  @media (min-width:768px){
+    body{font-size:15.5px}
+    .app{max-width:1000px}
+    .wrap{padding:0 28px}
+    .greet{font-size:30px}
+    .view.active{column-count:2;column-gap:20px}
+    .view.active>.card,.view.active>.pcard{break-inside:avoid;-webkit-column-break-inside:avoid;margin-bottom:14px}
+    .view.active>.greet,.view.active>.subline,.view.active>.runway,
+    .view.active>.stat-row,.view.active>.filters,.view.active>.section-h,
+    .view.active>.list-h,.view.active>.grid2,.view.active>.btn,
+    .view.active>.btn-row,.view.active>.field,.view.active>.row2,
+    .view.active>.empty,.view.active>.divider,.view.active>input{
+      column-span:all;-webkit-column-span:all}
+    .grid2{grid-template-columns:repeat(4,1fr)}
+    .runway{gap:10px}
+    .rday{min-width:66px;padding:12px 10px 10px}
+    .stat .n{font-size:26px}
+  }
+  /* ===== iPad landscape / desktop: sidebar ===== */
+  @media (min-width:1024px){
+    .sidebar{display:flex}
+    .nav{display:none}
+    .topbar{display:none}
+    .app{max-width:none;margin:0;padding:0}
+    .wrap{margin-left:248px;padding:calc(var(--safe-t) + 34px) 46px 72px;max-width:1160px}
+    .glow{left:248px;transform:none;width:660px}
+    .greet{font-size:32px}
+  }
+  @media (min-width:1440px){
+    .view.active{column-count:3}
+    .wrap{max-width:1440px}
+  }
 </style>
 </head>
 <body>
 <div class="glow"></div>
+<nav class="sidebar" id="sidebar">
+  <div class="s-brand">
+    <div class="mark"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5a3 3 0 0 0-3 3 3 3 0 0 0-3 3 3 3 0 0 0 1 5 3 3 0 0 0 5 1 3 3 0 0 0 5-1 3 3 0 0 0 1-5 3 3 0 0 0-3-3 3 3 0 0 0-3-3Z"/><path d="M12 5v14"/></svg></div>
+    <div><h1>Smart Brain</h1><div class="sub">Command Center</div></div>
+  </div>
+  <button class="s-capture" onclick="openCapture()"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg> Capturar</button>
+  <button class="snav-item" data-tab="hoy" onclick="go('hoy')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9.5 12 3l9 6.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"/></svg> Hoy</button>
+  <button class="snav-item" data-tab="tareas" onclick="go('tareas')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m3 7 2 2 3-3"/><path d="M13 7h8"/><path d="m3 15 2 2 3-3"/><path d="M13 15h8"/></svg> Tareas</button>
+  <button class="snav-item" data-tab="rec" onclick="go('rec')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m17 2 4 4-4 4"/><path d="M3 11v-1a4 4 0 0 1 4-4h14"/><path d="m7 22-4-4 4-4"/><path d="M21 13v1a4 4 0 0 1-4 4H3"/></svg> Recurrentes</button>
+  <button class="snav-item" data-tab="fav" onclick="go('fav')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 14h2a2 2 0 0 0 2-2 2 2 0 0 0-2-2H9l-3 3"/><path d="m18 11 3-3-6-6-3 3"/><path d="M2 15l4 4 6-2 4-4"/></svg> Favores</button>
+  <button class="snav-item" data-tab="port" onclick="go('port')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/></svg> Portafolios</button>
+  <div class="s-spacer"></div>
+  <button class="snav-item" data-tab="set" onclick="go('set')"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg> Ajustes</button>
+  <div class="s-foot">Smart Brain v1</div>
+</nav>
 <div class="app">
   <div class="wrap">
     <div class="topbar">
@@ -389,6 +458,7 @@ function go(v){
   document.getElementById(VIEWS[v]).classList.add('active');
   const navTab = ['fav','port','set'].includes(v)?'mas':v;
   document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===navTab));
+  document.querySelectorAll('.snav-item').forEach(t=>t.classList.toggle('on',t.dataset.tab===v));
   window.scrollTo(0,0);
   render(v);
 }
